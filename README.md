@@ -1,168 +1,99 @@
-# Proyek-Clustering-dan-Klasifikasi
-# Mental Health Clustering Analysis
+# Proyek-Clustering-dan-Klasifikasi Mental Health Clustering Analysis
+## Domain Proyek
+Gangguan kesehatan mental (*mental health disorders*) merupakan isu global yang kian mendesak dan memengaruhi jutaan orang di seluruh dunia. Berdasarkan data dari World Health Organization (WHO), prevalensi gangguan kesehatan mental seperti depresi, kecemasan, skizofrenia, dan gangguan bipolar terus meningkat signifikan selama beberapa dekade terakhir. Masalah ini tidak hanya berdampak pada kesejahteraan emosional dan sosial individu, melainkan juga memicu beban ekonomi yang besar bagi negara akibat penurunan produktivitas.
 
-## Deskripsi Proyek
-
-Proyek ini merupakan implementasi *unsupervised learning* menggunakan metode clustering untuk menganalisis data kesehatan mental (*Mental Health Dataset*). Tujuan utama dari proyek ini adalah mengelompokkan data berdasarkan karakteristik tertentu sehingga dapat ditemukan pola atau segmentasi yang tersembunyi di dalam dataset.
-
-Proyek ini dibuat menggunakan Python dan dijalankan melalui Jupyter Notebook.
+Secara konvensional, penanganan kesehatan mental bersifat reaktif dan sering kali terlambat karena minimnya segmentasi data wilayah atau populasi yang berisiko tinggi. Melalui pendekatan data science dan *Machine Learning*, kita dapat mengidentifikasi pola penyebaran atau karakteristik prevalensi gangguan mental lintas negara dan tahun. Analisis berbasis pengelompokan (*Clustering*) dan pengenalan pola otomatis (*Classification*) dapat membantu para pengambil kebijakan kesehatan masyarakat (*public health*) untuk melakukan alokasi sumber daya medis secara lebih tepat sasaran, memahami klaster populasi yang rentan, serta memprediksi kategori risiko wilayah secara instan.
 
 ---
 
-## Dataset
+## Business Understanding
 
-Dataset yang digunakan berasal dari Kaggle:
+### Problem Statements
+1. Bagaimana mengelompokkan wilayah/negara berdasarkan prevalensi berbagai gangguan mental tanpa adanya label klasifikasi awal?
+2. Berapa jumlah klaster optimal untuk memisahkan tingkat keparahan gangguan mental secara objektif?
+3. Bagaimana membangun model prediktif yang akurat untuk mengklasifikasikan wilayah ke dalam klaster risiko kesehatan mental tersebut demi mendukung keputusan medis yang cepat?
+4. Apakah optimasi melalui hyperparameter tuning dapat mendongkrak performa model klasifikasi secara signifikan?
 
-* Dataset: *Mental Health Dataset*
-* Sumber: urlKaggle - Mental Health Dataset[https://www.kaggle.com/datasets/imtkaggleteam/mental-health](https://www.kaggle.com/datasets/imtkaggleteam/mental-health)
+### Goals
+1. Mengelompokkan data prevalensi gangguan kesehatan mental global menggunakan algoritma *Unsupervised Learning* (K-Means Clustering).
+2. Menentukan jumlah kelompok (*K*) optimal berdasarkan metrik evaluasi objektif (*Elbow Method* dan *Silhouette Score*).
+3. Membangun model *Supervised Learning* (Decision Tree dan Random Forest) untuk memprediksi kategori klaster risiko wilayah secara presisi.
+4. Mengevaluasi dampak dari penerapan *Hyperparameter Tuning* berbasis *Grid Search* terhadap efisiensi dan akurasi model klasifikasi.
 
-### Karakteristik Dataset
-
-* Tidak memiliki label (*unlabeled dataset*)
-* Memiliki data numerik dan kategorikal
-* Jumlah data: 6420 baris
-
----
-
-## Tahapan Analisis
-
-Proyek ini mencakup beberapa tahapan utama:
-
-1. Import library
-2. Memuat dataset
-3. Exploratory Data Analysis (EDA)
-4. Data preprocessing
-
-   * Handling missing values
-   * Encoding data kategorikal
-   * Normalisasi data
-   * Penanganan outlier
-5. Pembangunan model clustering
-6. Evaluasi clustering menggunakan Silhouette Score
-7. Visualisasi hasil clustering menggunakan PCA
-8. Interpretasi cluster
+### Solution Statements
+1. **Pendekatan Analisis Data & Clustering**: Menggunakan algoritma **K-Means Clustering** didahului oleh prapemrosesan data (pembersihan *outliers*, standardisasi, dan reduksi dimensi dengan PCA) untuk mengekstrak struktur kelompok yang laten.
+2. **Pendekatan Klasifikasi Prediktif**: Menerapkan model **Decision Tree Classifier** dan **Random Forest Classifier** pada data berlabel hasil *clustering* untuk mengotomatisasi pengenalan klaster risiko.
+3. **Optimasi & Eksperimen**: Melakukan eksperimen tuning parameter utama menggunakan **GridSearchCV** serta memetakan *Learning Curve* untuk mendeteksi indikasi *overfitting* atau *underfitting* pada model.
 
 ---
 
-## Algoritma yang Digunakan
+## Data Understanding
+Dataset yang digunakan dalam proyek ini berwujud data runtun waktu global mengenai metrik gangguan mental, yang bersumber dari platform Kaggle: [Mental Health Dataset](https://www.kaggle.com/datasets/imtkaggleteam/mental-health/code).
 
-Beberapa metode dan library yang digunakan pada proyek ini:
-
-* K-Means Clustering
-* PCA (*Principal Component Analysis*)
-* Silhouette Score Evaluation
-* Elbow Method
-
-### Library Utama
-
-```python
-pandas
-numpy
-matplotlib
-seaborn
-scikit-learn
-yellowbrick
-```
+### Karakteristik Dataset:
+* **Jumlah Baris**: 6.420 baris data observasi.
+* **Kondisi Label**: Data awal tidak memiliki label target (*unlabeled*).
+* **Fitur Utama (Variabel)**:
+  * `Negara` / `Country`: Entitas nama wilayah/negara (Kategorikal).
+  * `Tahun` / `Year`: Tahun pencatatan data (Numerik).
+  * `Schizophrenia disorders`: Persentase prevalensi gangguan skizofrenia (Numerik).
+  * `Depressive disorders`: Persentase prevalensi gangguan depresi (Numerik).
+  * `Anxiety disorders`: Persentase prevalensi gangguan kecemasan (Numerik).
+  * `Bipolar disorders`: Persentase prevalensi gangguan bipolar (Numerik).
+  * `Eating disorders`: Persentase prevalensi gangguan makan (Numerik).
 
 ---
 
-## Struktur File
-
-```bash
-├── [Clustering]_Submission_Akhir_BMLP_Meicha_Salsabila_Budiyanti_(Updated).ipynb
-├── hasil_clustering.csv
-└── README.md
-```
-
-### Penjelasan File
-
-* `ipynb` : Notebook utama yang berisi seluruh proses analisis dan clustering.
-* `hasil_clustering.csv` : Dataset hasil clustering yang sudah ditambahkan label cluster.
-* `README.md` : Dokumentasi proyek.
+## Data Preprocessing
+Beberapa tahapan prapemrosesan yang diterapkan guna menjamin integritas data sebelum memasuki fase permodelan meliputi:
+1. **Exploratory Data Analysis (EDA)**: Visualisasi distribusi fitur, pengecekan korelasi antar-variabel, dan deteksi dini data pencilan (*outliers*).
+2. **Pembersihan Outliers**: Menghapus atau menyesuaikan data ekstrim yang dapat mendistorsi penempatan titik pusat klaster (*centroids*).
+3. **Standardisasi/Normalisasi**: Mengubah skala fitur numerik menggunakan `StandardScaler` atau `MinMaxScaler` sehingga seluruh variabel memiliki kontribusi bobot yang seimbang.
+4. **Reduksi Dimensi (PCA)**: Menerapkan *Principal Component Analysis* untuk mereduksi kompleksitas kolom sekaligus meningkatkan visualisasi dan keterpisahan kelompok data (*Silhouette Score* meningkat dari **0.4311** menjadi **0.5619** setelah aplikasi PCA).
 
 ---
 
-## Preview Visualisasi
+## Modeling & Hasil Analisis
 
-### Elbow Method
+### 1. Pembangunan & Evaluasi Model Clustering (K-Means)
+Penentuan jumlah klaster terbaik diuji lewat rentang nilai *K = 2* hingga *K = 9*:
+* $K = 2$, Silhouette Score = 0.3543
+* **$K = 3$, Silhouette Score = 0.4311 (Dipilih sebagai jumlah kelompok optimal)**
+* $K = 4$, Silhouette Score = 0.3895
 
-Tambahkan hasil visualisasi Elbow Method pada folder `images/` lalu tampilkan dengan syntax berikut:
-
-```markdown
-![Elbow Method](images/elbow_method.png)
-```
-
-### Visualisasi Cluster PCA
-
-```markdown
-![PCA Clustering](images/pca_clustering.png)
-```
-
-### Distribusi Cluster
-
-```markdown
-![Cluster Distribution](images/cluster_distribution.png)
-```
-
-> Simpan seluruh gambar pada folder `images` agar README lebih rapi dan mudah dibaca.
-
-Contoh struktur repository:
-
-```bash
-├── images
-│   ├── elbow_method.png
-│   ├── pca_clustering.png
-│   └── cluster_distribution.png
-├── hasil_clustering.csv
-├── notebook.ipynb
-└── README.md
-```
+#### Interpretasi Karakteristik Hasil Cluster (Setelah Inverse Transform):
+* **Cluster 0 (Tingkat Gangguan Tinggi)**: Memiliki rata-rata tingkat gangguan mental tertinggi secara umum, khususnya pada aspek *Depressive disorders* ($\mu \approx 3.65$), *Anxiety disorders* ($\mu \approx 4.61$), dan *Bipolar disorders* ($\mu \approx 0.87$).
+* **Cluster 1 (Tingkat Gangguan Ringan)**: Menunjukkan rata-rata tingkat gangguan mental yang jauh lebih rendah dan stabil dibandingkan Cluster 0 (*Depressive*: $\mu \approx 3.08$, *Anxiety*: $\mu \approx 3.48$).
+* **Cluster 2 (Tingkat Depresi Dominan Tinggi)**: Unik karena menunjukkan tingkat *Depressive disorders* yang paling ekstrem tinggi ($\mu \approx 4.67$), namun untuk jenis gangguan mental lainnya seperti kecemasan cenderung relatif lebih rendah daripada Cluster 0.
 
 ---
 
-## Hasil Clustering
+### 2. Pembangunan & Evaluasi Model Klasifikasi
+Setelah pelabelan klaster disematkan ke dalam dataset (`hasil_clustering.csv`), data dipecah (*Data Splitting*) menjadi subset pelatihan (*training*) dan subset pengujian (*testing*) untuk melatih dua arsitektur *supervised learning*: **Decision Tree** dan **Random Forest**.
 
-Model clustering berhasil membagi data menjadi **3 cluster utama** berdasarkan kemiripan karakteristik gangguan kesehatan mental pada setiap negara dan tahun.
+#### Perbandingan Performa Sebelum & Sesudah Tuning:
 
-### Distribusi Cluster
+| Model | Kondisi | Accuracy | F1-Score | Recall |
+| :--- | :--- | :---: | :---: | :---: |
+| **Random Forest** | Sebelum Tuning | 0.998274 | 0.998274 | 0.998274 |
+| | Setelah Tuning (Grid Search) | **0.998274** | **0.998273** | 0.998274 |
+| **Decision Tree** | Sebelum Tuning | 0.997412 | 0.997412 | 0.997412 |
+| | Setelah Tuning (Grid Search) | **0.997412** | **0.997412** | 0.997412 |
 
-| Cluster | Jumlah Data |
-| ------- | ----------- |
-| 0       | 1972        |
-| 1       | 2240        |
-| 2       | 1580        |
+*Catatan Parameter Optimal (Grid Search):*
+* **Random Forest**: `{'criterion': 'gini', 'max_depth': 10, 'min_samples_split': 2, 'n_estimators': 300}`
+* **Decision Tree**: `{'criterion': 'gini', 'max_depth': 10, 'min_samples_split': 5}`
 
-### Variabel yang Digunakan
-
-* Schizophrenia disorders
-* Depressive disorders
-* Anxiety disorders
-* Bipolar disorders
-* Eating disorders
-
-### Evaluasi Model
-
-Evaluasi kualitas clustering dilakukan menggunakan:
-
-* Elbow Method
-* Silhouette Score
-
-### Output Project
-
-Hasil akhir clustering disimpan pada file:
-
-```bash
-hasil_clustering.csv
-```
-
-File tersebut berisi data yang telah ditambahkan label cluster pada kolom:
-
-```python
-Cluster
-```
-
-Visualisasi clustering dilakukan menggunakan PCA (*Principal Component Analysis*) untuk mereduksi dimensi data menjadi 2 dimensi sehingga pola antar cluster lebih mudah dianalisis.
+#### Analisis Hasil Evaluasi Klasifikasi:
+1. **Dampak Hyperparameter Tuning**: Proses *tuning* via `GridSearchCV` tidak memberikan eskalasi performa yang signifikan baik pada Random Forest maupun Decision Tree. Performa model tetap bertahan stabil di kisaran akurasi **99.8%** dan **99.7%**. Hal ini mengindikasikan bahwa konfigurasi parameter bawaan (*default*) bawaan dari pustaka Scikit-Learn sudah sangat optimal dalam memetakan batas keputusan (*decision boundary*) dari data hasil klasterisasi ini.
+2. **Analisis Learning Curve**:
+   * Pada visualisasi kurva pembelajaran, grafik awal sempat menunjukkan riak indikasi *overfitting* di mana model bekerja sempurna pada data latih namun sedikit renggang pada data uji berskala kecil. 
+   * Sebaliknya, pada variasi parameter tertentu ditemukan gejala *underfitting* akibat pembatasan kedalaman pohon (*max_depth*) yang terlalu ketat sehingga model kurang optimal menyerap pola esensial data. Keseimbangan terbaik dicapai pada tingkat kompleksitas sedang (`max_depth: 10`).
 
 ---
 
+## Kesimpulan
+Proyek ini sukses menerapkan pipeline analitik komprehensif dari hulu ke hilir:
+* **Segmentasi Terbentuk**: Data kesehatan mental global berhasil terbagi secara objektif ke dalam 3 tingkatan risiko (Tinggi, Ringan, dan Depresi Dominan).
+* **Prediksi Akurat**: Model klasifikasi mampu mengenali dan memprediksi kategori klaster wilayah baru dengan tingkat akurasi yang sangat impresif melampaui **99.7%**. Model ini sangat andal untuk dijadikan sistem otomasi diagnosis risiko wilayah bagi lembaga kesehatan internasional.
 Project submission untuk pembelajaran *Machine Learning Clustering*.
